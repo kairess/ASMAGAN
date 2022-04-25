@@ -60,7 +60,10 @@ class ASM(nn.Module):
             conditionnp[index][id]=1.0
         
         condition=torch.from_numpy(conditionnp).float()
-        a = condition.cuda()
+        if torch.cuda.is_available():
+            a = condition.cuda()
+        else:
+            a = condition.cpu()
 
         attr        = a.view((n, -1, 1, 1)).expand((n, -1, h, w))
         state  = torch.cat([state, attr], dim=1)
